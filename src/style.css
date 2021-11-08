@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box; 
+    color: black;
+}
+body {  
+    background-color: #ffcc99; 
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding: 100px;
+    border-radius: 10px;
+    background-color: #ffff;
+    min-height: 400p; 
+}
+
+
