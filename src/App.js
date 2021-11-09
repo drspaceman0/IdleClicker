@@ -3,15 +3,24 @@ import ReactDOM from "react-dom";
 
 import EggGenerator from "./EggGenerator";
 
+import StuMemeImage_680 from "./img/template-680.png";
+import StuMemeImage_401 from "./img/template-401.png";
+import StuMemeImage_328 from "./img/template-328.png";
+import StuMemeImage from "./img/template.png";
+
+
 const NUM_ENABLE_EGG_GENERATOR = 12;
 const NUM_ENABLE_CARTON_GENERATOR = 144;
 const NUM_ENABLE_GROSS_GENERATOR = 2076;
+
+
+
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      eggs: 0,
+      eggs: 1223,
       click_amount: 1,
       click_upgrade_1: false,
       click_upgrade_2: false,
@@ -94,10 +103,26 @@ class App extends Component {
   }
 
   render() {
-    return (
+    return ( 
       <div className="main">
-        <header>Stu&apos;s Egg Mistake</header>
+        <section className="hero"> 
+        <figure className="txtover">
+          <picture>
+              <source srcSet={StuMemeImage_680} media="(min-width: 401px)" /> 
+              <source srcSet={StuMemeImage_401} media="(min-width: 328px)" />  
+              <img 
+                src={StuMemeImage_328} alt="Stu thats x eggs! Meme image"
+              /> 
+            </picture>
+            <figcaption className="caption-1">Sure you got enough eggs?</figcaption> 
+            <figcaption className="caption-2">Yeah I got a gross</figcaption> 
+            <figcaption className="caption-3">A gross?</figcaption> 
+            <figcaption className="caption-4">Thats 144 eggs!</figcaption> 
+            <figcaption className="caption-5">Oops.</figcaption> 
+            </figure>
+        </section> 
         <hr />
+        <section className="egg-actions">
         <div>
           <button className="value-button" onClick={() => this.incrementEggs()}>
             Buy Egg
@@ -131,8 +156,9 @@ class App extends Component {
           myIncrementAmount={144}
           myCallBack={() => this.incrementGrossGenerators()}
           myEggTotal={this.state.eggs}
-        />
-      </div>
+        /> 
+      </section>
+      </div> 
     );
   }
 }
