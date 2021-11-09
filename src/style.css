@@ -25,9 +25,13 @@ body {
 }
 
  .value-label {
-    padding-right: 5px;
+    padding-left: 5px;
  }
 
  .value-button {
      
+ }
+
+ .hidden {
+     display: none;
  }

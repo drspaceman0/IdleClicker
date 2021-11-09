@@ -1,13 +1,27 @@
 import { Component } from "react";
 import ReactDOM from "react-dom";
 
+import EggGenerator from "./EggGenerator";
+
+const NUM_ENABLE_EGG_GENERATOR = 12;
+const NUM_ENABLE_CARTON_GENERATOR = 144;
+const NUM_ENABLE_GROSS_GENERATOR = 2076;
+
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      intervalAmount: 1000,
-      totalPoints: 0,
-      totalHelpers_1: 0,
+      eggs: 0,
+      click_amount: 1,
+      click_upgrade_1: false,
+      click_upgrade_2: false,
+      click_upgrade_3: false,
+      enable_egg_generator: false,
+      egg_generators: 0,
+      enable_carton_generator: false,
+      carton_generators: 0,
+      enable_gross_generator: false,
+      gross_generators: 0,
     };
   }
 
@@ -21,42 +35,103 @@ class App extends Component {
   }
 
   tick() {
-    console.log("tick! helpers add: " + this.state.totalHelpers_1);
     // helper (tier 1)
-    if (this.state.totalHelpers_1 > 0) {
-      let addend = this.state.totalHelpers_1;
-      this.setState({ totalPoints: this.state.totalPoints + addend });
+    if (this.state.egg_generators > 0) {
+      let addend = this.state.egg_generators;
+      this.setState({ eggs: this.state.eggs + addend });
+    }
+
+    if (
+      !this.state.enable_egg_generator &&
+      this.state.eggs >= NUM_ENABLE_EGG_GENERATOR
+    ) {
+      this.setState({ enable_egg_generator: true });
+    }
+
+    if (
+      !this.state.enable_carton_generator &&
+      this.state.eggs >= NUM_ENABLE_CARTON_GENERATOR
+    ) {
+      this.setState({ enable_carton_generator: true });
+    }
+
+    if (
+      !this.state.enable_gross_generator &&
+      this.state.eggs >= NUM_ENABLE_GROSS_GENERATOR
+    ) {
+      this.setState({ enable_gross_generator: true });
     }
   }
 
-  incrementTotalPoints() {
-    console.log(this.state.totalPoints);
-    this.setState({ totalPoints: this.state.totalPoints + 1 });
+  incrementEggs() {
+    this.setState({ eggs: this.state.eggs + this.state.click_amount });
   }
 
-  incrementTotalHelpers_1() {
-    this.setState({ totalHelpers_1: this.state.totalHelpers_1 + 1 });
+  incrementEggGenerators() {
+    if (this.state.eggs >= NUM_ENABLE_EGG_GENERATOR) {
+      this.setState({
+        egg_generators: this.state.egg_generators + 1,
+        eggs: this.state.eggs - NUM_ENABLE_EGG_GENERATOR,
+      });
+    }
+  }
+  incrementCartonGenerators() {
+    if (this.state.eggs >= NUM_ENABLE_CARTON_GENERATOR) {
+      this.setState({
+        carton_generators: this.state.carton_generators + 1,
+        eggs: this.state.eggs - NUM_ENABLE_CARTON_GENERATOR,
+      });
+    }
+  }
+
+  incrementGrossGenerators() {
+    if (this.state.eggs >= NUM_ENABLE_GROSS_GENERATOR) {
+      this.setState({
+        gross_generators: this.state.carton_generators + 1,
+        eggs: this.state.eggs - NUM_ENABLE_GROSS_GENERATOR,
+      });
+    }
   }
 
   render() {
     return (
       <div className="main">
-      <header>Stu&apos;s Egg Mistake</header>
+        <header>Stu&apos;s Egg Mistake</header>
+        <hr />
         <div>
-        <span className="value-label">
-        Eggs: {this.state.totalPoints}  
-        </span>
-        <button className="value-button" onClick={() => this.incrementTotalPoints()}>+1 Egg</button></div> 
-        <div>
-        <span className="value-label">Helpers: {this.state.totalHelpers_1}</span>
-          <button className="value-button" onClick={() => this.incrementTotalHelpers_1()}>
-            +1 Helpers (Tier 1)
+          <button className="value-button" onClick={() => this.incrementEggs()}>
+            Buy Egg
           </button>
+          <span className="value-label">{this.state.eggs}</span>
         </div>
-        <div className="buttons">
-         
-          
-        </div>
+
+        <EggGenerator
+          isEnabled={this.state.enable_egg_generator}
+          myCost={NUM_ENABLE_EGG_GENERATOR}
+          myTotal={this.state.egg_generators}
+          myIncrementAmount={1}
+          myCallBack={() => this.incrementEggGenerators()}
+          myEggTotal={this.state.eggs}
+        />
+
+        <hr />
+        <EggGenerator
+          isEnabled={this.state.enable_carton_generator}
+          myCost={NUM_ENABLE_CARTON_GENERATOR}
+          myTotal={this.state.carton_generators}
+          myIncrementAmount={12}
+          myCallBack={() => this.incrementCartonGenerators()}
+          myEggTotal={this.state.eggs}
+        />
+        <hr />
+        <EggGenerator
+          isEnabled={this.state.enable_gross_generator}
+          myCost={NUM_ENABLE_GROSS_GENERATOR}
+          myTotal={this.state.gross_generators}
+          myIncrementAmount={144}
+          myCallBack={() => this.incrementGrossGenerators()}
+          myEggTotal={this.state.eggs}
+        />
       </div>
     );
   }
