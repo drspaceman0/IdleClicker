@@ -5,8 +5,7 @@ import EggGenerator from "./EggGenerator";
 
 import StuMemeImage_680 from "./img/template-680.png";
 import StuMemeImage_401 from "./img/template-401.png";
-import StuMemeImage_328 from "./img/template-328.png";
-import StuMemeImage from "./img/template.png";
+import StuMemeImage_328 from "./img/template-328.png"; 
 
 
 const NUM_ENABLE_EGG_GENERATOR = 12;
