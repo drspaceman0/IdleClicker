@@ -37,7 +37,12 @@ body {
 .txtover figcaption {
     position: absolute;
 
+    
+}
+
+.meme-font {
     font-family: impact;
+    font-size: 1rem;
     color: white;
     letter-spacing: 1px;
     text-shadow:2px 2px 0 #000,
@@ -48,9 +53,35 @@ body {
     2px 0px 0 #000,
     0px -2px 0 #000,
     -2px 0px 0 #000,
-    2px 2px 5px #000;
+    2px 2px 5px #000; 
+    transition: all 500ms; 
+}
+
+.magnitude-option {
+    user-select: none;
+}
+
+.generator-option {
+    user-select: none;
+}
+
+.magnitude-link {
+    user-select: none;  
+}
+
+.magnitude-link:hover {
+    position: relative;
+    bottom: 1px;
+    left: 1px;
+}
+.magnitude-link:active {
+    position: relative;
+    bottom: 2px;
+    left: 2px;  
     
 }
+
+
 
 .caption-1 {
     top: 0;
@@ -59,12 +90,12 @@ body {
 
 .caption-2 {
     top: 44%;
-    left: 15%;
+    left: 5%;
 }
 
 .caption-3 {
     top: 44%;
-    left: 72%;
+    left: 60%;
 }
 
 .caption-4 {
@@ -91,21 +122,35 @@ body {
     max-height: 464px;
 }
 
+.egg-actions {
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-evenly;
+    align-items: flex-start;  
+    padding: 10px;
+
+}
+
+.magnitude { 
+    /* padding: 6px 10px; */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 2px;
+    width: 100%;
+}
+
+.magnitude-add {
+    margin-right: 5px; 
+}
 
 
- .value-label {
-    padding-left: 5px;
- }
 
- .value-button {
-     
- }
-
- .value-cost {
-     margin: 0;
-     font-size: 0.8rem;
- }
-
- .hidden {
-     display: none;
- }
+button {
+    user-select: none;
+}
+ 
+  
+.hidden {
+    visibility: hidden;
+}

@@ -1,165 +1,222 @@
 import { Component } from "react";
 import ReactDOM from "react-dom";
 
-import EggGenerator from "./EggGenerator";
+import EggMagnitude from "./EggMagnitude";
+// import ActionScentence from "./ActionSentence";
+import HeroImage from "./HeroImage";
 
-import StuMemeImage_680 from "./img/template-680.png";
-import StuMemeImage_401 from "./img/template-401.png";
-import StuMemeImage_328 from "./img/template-328.png"; 
-
-
-const NUM_ENABLE_EGG_GENERATOR = 12;
-const NUM_ENABLE_CARTON_GENERATOR = 144;
-const NUM_ENABLE_GROSS_GENERATOR = 2076;
-
-
-
-
+const DEBUG_MODE = true;
+ 
 class App extends Component {
   constructor() {
     super();
     this.state = {
-      eggs: 1223,
-      click_amount: 1,
-      click_upgrade_1: false,
-      click_upgrade_2: false,
-      click_upgrade_3: false,
-      enable_egg_generator: false,
-      egg_generators: 0,
-      enable_carton_generator: false,
-      carton_generators: 0,
-      enable_gross_generator: false,
-      gross_generators: 0,
+      totalEggs: 0, 
+      magnitudes: [
+        {
+          name: "Egg",
+          total: 0,
+          eggVal: 1,
+          costToShowUnlock: 0,
+          costToGenerate: 100,
+          totalGenerators: 0,
+          totalClicks: 0,
+          totalGeneratorClicks: 0,
+        },
+        {
+          name: "Dozen",
+          total: 0,
+          eggVal: 12,
+          costToShowUnlock: 13,
+          costToGenerate: 256,
+          totalGenerators: 0,
+          totalClicks: 0,
+          totalGeneratorClicks: 0,
+        },
+        {
+          name: "Gross",
+          total: 0,
+          eggVal: 144,
+          costToShowUnlock: 1026,
+          costToGenerate: 5026,
+          totalGenerators: 0,
+          totalClicks: 0,
+          totalGeneratorClicks: 0,
+        },
+        {
+          name: "Grand",
+          total: 0,
+          eggVal: 1000,
+          costToShowUnlock: 5000,
+          costToGenerate: 10000,
+          totalGenerators: 0,
+          totalClicks: 0,
+          totalGeneratorClicks: 0,
+        },
+        {
+          name: "Myriad",
+          total: 0,
+          eggVal: 10000,
+          costToShowUnlock: 24000,
+          costToGenerate: 120000,
+          totalGenerators: 0,
+          totalClicks: 0,
+          totalGeneratorClicks: 0,
+        },
+      ],
     };
+
+    // debug function
+    if (DEBUG_MODE) {
+      this.enableEverything();
+    }
   }
 
+  enableEverything() {
+    // debug function
+    const newMagnitudes = this.state.magnitudes.slice();
+    for (let i = 0; i < newMagnitudes.length; i++) {
+      newMagnitudes[i].total = 1;
+      newMagnitudes[i].totalClicks = 1;
+      newMagnitudes[i].totalGeneratorClicks = 1;
+    }
+    this.setState({ magnitudes: newMagnitudes });
+  }
+
+  // set interval
   componentDidMount() {
-    // set interval
     this.timerID = setInterval(() => this.tick(), 1000);
   }
 
+  // clear interval
   componentWillUnmount() {
     clearInterval(this.timerID);
   }
 
   tick() {
-    // helper (tier 1)
-    if (this.state.egg_generators > 0) {
-      let addend = this.state.egg_generators;
-      this.setState({ eggs: this.state.eggs + addend });
-    }
+    this.generateEggs();
+    // this.unlockGenerators();
+  }
 
-    if (
-      !this.state.enable_egg_generator &&
-      this.state.eggs >= NUM_ENABLE_EGG_GENERATOR
-    ) {
-      this.setState({ enable_egg_generator: true });
+  generateEggs() {
+    let generatedEggs = 0;
+    let updatedMagnitudes = this.state.magnitudes.slice();
+    for (const i in this.state.magnitudes) {
+      const g = this.state.magnitudes[i];
+      if (g.totalGenerators > 0) {
+        updatedMagnitudes[i].total += g.totalGenerators;
+        generatedEggs += g.totalGenerators * g.eggVal;
+      }
     }
-
-    if (
-      !this.state.enable_carton_generator &&
-      this.state.eggs >= NUM_ENABLE_CARTON_GENERATOR
-    ) {
-      this.setState({ enable_carton_generator: true });
-    }
-
-    if (
-      !this.state.enable_gross_generator &&
-      this.state.eggs >= NUM_ENABLE_GROSS_GENERATOR
-    ) {
-      this.setState({ enable_gross_generator: true });
+    if (generatedEggs > 0) {
+      this.setState({ magnitudes: updatedMagnitudes });
+      this.setState({ totalEggs: this.state.totalEggs + generatedEggs });
     }
   }
 
-  incrementEggs() {
-    this.setState({ eggs: this.state.eggs + this.state.click_amount });
+  addXMagnitudes(index, x = 1) { 
+    // x can be positive or negative
+    console.log(this)
+
+    let updatedMagnitudes = this.state.magnitudes.slice();
+    updatedMagnitudes[index].total += x;
+    updatedMagnitudes[index].showLocked = false;
+    this.setState({ magnitudes: updatedMagnitudes });
+    this.setState({ totalClicks: updatedMagnitudes[index].totalClicks + 1 });
+    this.setState({
+      totalEggs: this.state.totalEggs + updatedMagnitudes[index].eggVal * x,
+    });
   }
 
-  incrementEggGenerators() {
-    if (this.state.eggs >= NUM_ENABLE_EGG_GENERATOR) {
-      this.setState({
-        egg_generators: this.state.egg_generators + 1,
-        eggs: this.state.eggs - NUM_ENABLE_EGG_GENERATOR,
-      });
-    }
-  }
-  incrementCartonGenerators() {
-    if (this.state.eggs >= NUM_ENABLE_CARTON_GENERATOR) {
-      this.setState({
-        carton_generators: this.state.carton_generators + 1,
-        eggs: this.state.eggs - NUM_ENABLE_CARTON_GENERATOR,
-      });
-    }
+  addXGenerators(index, x = 1) {
+    let updatedMagnitudes = this.state.magnitudes.slice();
+    updatedMagnitudes[index].totalGenerators += x;
+    updatedMagnitudes[index].generateLocked = false;
+    this.setState({ magnitudes: updatedMagnitudes });
+    this.setState({
+      totalGeneratorClicks: updatedMagnitudes[index].totalGeneratorClicks + 1,
+    });
+
+    // ADD FUNCTION FOR APPPLYING COST TO TOTAL EGGS
   }
 
-  incrementGrossGenerators() {
-    if (this.state.eggs >= NUM_ENABLE_GROSS_GENERATOR) {
-      this.setState({
-        gross_generators: this.state.carton_generators + 1,
-        eggs: this.state.eggs - NUM_ENABLE_GROSS_GENERATOR,
-      });
-    }
-  }
+  
+   
+  render() { 
+    const myActionSentence =   
+    <span>{this.state.magnitudes.map((g, index) => (
+       <MagnitudeButton magnitude={g} key={index} id={index} totalEggs={this.state.totalEggs} addMagnitudeFunction={() => this.addXMagnitudes(index)}/> 
+      
+    ))}  
+    <br />
+     {this.state.magnitudes.map((g, index) => (
+       <GeneratorButton magnitude={g} key={index} id={index} totalEggs={this.state.totalEggs} addGeneratorFunction={() => this.addXGenerators(index)}/> 
+  
+    ))} 
+    </span>
 
-  render() {
-    return ( 
+
+    return (
       <div className="main">
-        <section className="hero"> 
-        <figure className="txtover">
-          <picture>
-              <source srcSet={StuMemeImage_680} media="(min-width: 401px)" /> 
-              <source srcSet={StuMemeImage_401} media="(min-width: 328px)" />  
-              <img 
-                src={StuMemeImage_328} alt="Stu thats x eggs! Meme image"
-              /> 
-            </picture>
-            <figcaption className="caption-1">Sure you got enough eggs?</figcaption> 
-            <figcaption className="caption-2">Yeah I got a gross</figcaption> 
-            <figcaption className="caption-3">A gross?</figcaption> 
-            <figcaption className="caption-4">Thats 144 eggs!</figcaption> 
-            <figcaption className="caption-5">Oops.</figcaption> 
-            </figure>
-        </section> 
-        <hr />
-        <section className="egg-actions">
-        <div>
-          <button className="value-button" onClick={() => this.incrementEggs()}>
-            Buy Egg
-          </button>
-          <span className="value-label">{this.state.eggs}</span>
-        </div>
-
-        <EggGenerator
-          isEnabled={this.state.enable_egg_generator}
-          myCost={NUM_ENABLE_EGG_GENERATOR}
-          myTotal={this.state.egg_generators}
-          myIncrementAmount={1}
-          myCallBack={() => this.incrementEggGenerators()}
-          myEggTotal={this.state.eggs}
-        />
-
-        <hr />
-        <EggGenerator
-          isEnabled={this.state.enable_carton_generator}
-          myCost={NUM_ENABLE_CARTON_GENERATOR}
-          myTotal={this.state.carton_generators}
-          myIncrementAmount={12}
-          myCallBack={() => this.incrementCartonGenerators()}
-          myEggTotal={this.state.eggs}
-        />
-        <hr />
-        <EggGenerator
-          isEnabled={this.state.enable_gross_generator}
-          myCost={NUM_ENABLE_GROSS_GENERATOR}
-          myTotal={this.state.gross_generators}
-          myIncrementAmount={144}
-          myCallBack={() => this.incrementGrossGenerators()}
-          myEggTotal={this.state.eggs}
+        <HeroImage
+          gameState={this.state} 
+          actionSentence={myActionSentence}
         /> 
-      </section>
-      </div> 
+        {/* <section className="egg-actions">
+          {this.state.magnitudes.map((g, index) => (
+            <EggMagnitude
+              key={index}
+              id={index}
+              magnitude={g}
+              totalEggs={this.state.totalEggs}
+              addMagnitudeFunction={() => this.addXMagnitudes(index)}
+              addGeneratorFunc={() => this.addXGenerators(index)}
+            />
+          ))}
+        </section> */}
+      </div>
     );
   }
 }
+
+// const ActionSentence = (props) => { 
+
+//   return (
+//   <span>{props.magnitudes.map((g, index) => (
+//       <MagnitudeButton key={index} id={index} magnitude={g} totalEggs={props.totalEggs} addMagnitudeFunction={() => props.addXMagnitudes(index)}/>
+//     ))} </span>
+
+//   );
+// }
+
+const MagnitudeButton = (props) => {
+  const myMagnitude = props.magnitude;  
+  const isHidden_addMagnitude =
+    myMagnitude.totalClicks == 0 && myMagnitude.costToShowUnlock > props.totalEggs
+      ? "hidden"
+      : "";
+ 
+  const isAddMagnitudeDisabled = false;
+  return (
+    <span className={"magnitude-option " + isHidden_addMagnitude}>
+      {myMagnitude.total} <a className="magnitude-link" disabled={isAddMagnitudeDisabled} onClick={props.addMagnitudeFunction}>{myMagnitude.name}, </a>
+    </span>
+  );
+};
+
+const GeneratorButton = (props) => {
+  const myMagnitude = props.magnitude;  
+  const isHidden_addGenerator =
+    myMagnitude.totalGeneratorClicks == 0 && myMagnitude.costToGenerate > props.totalEggs
+      ? "hidden"
+      : "";
+ 
+  const isAddGeneratorDisabled = false;
+  return (
+    <span className={"generator-option " + isHidden_addGenerator}>
+      {myMagnitude.total} <a className="magnitude-link" disabled={isAddGeneratorDisabled} onClick={props.addGeneratorFunction}>{myMagnitude.name}, </a>
+    </span>
+  );
+};
 
 ReactDOM.render(<App />, document.getElementById("root"));
