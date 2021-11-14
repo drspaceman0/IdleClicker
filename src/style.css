@@ -29,17 +29,42 @@ body {
     background-color: #ffff; 
 }
 
-.txtover {
+.hero-container {
     position: relative;
     margin: 0;
-} 
+}  
 
-.txtover figcaption {
-    position: absolute;
-
-    
+.hero-picture img{
+    margin-bottom: -5px;
 }
 
+.captions-container { 
+    min-width: 100%;
+    min-height: 100%; 
+
+    position: absolute; 
+    
+    top: 0px; 
+    display: grid;
+    grid-template-columns: auto auto; 
+    grid-auto-rows: 1fr;
+
+    grid-gap: 2px;  
+}
+
+.caption-box {
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+} 
+.caption-box-1 { 
+    justify-content: space-between;
+} 
+.caption-box-2, .caption-box-3, .caption-box-4 { 
+    justify-content: flex-end;
+}
+
+  
 .meme-font {
     font-family: impact;
     font-size: 1rem;
@@ -83,7 +108,8 @@ body {
 
 
 
-.caption-1 {
+
+/* .caption-1 {
     top: 0;
     left: 10%;
 }
@@ -106,7 +132,7 @@ body {
 .caption-5 {
     top: 94%;
     left: 72%;
-}
+} */
 
 
 .hero {

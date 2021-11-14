@@ -143,26 +143,13 @@ class App extends Component {
   
    
   render() { 
-    const myActionSentence =   
-    <span>{this.state.magnitudes.map((g, index) => (
-       <MagnitudeButton magnitude={g} key={index} id={index} totalEggs={this.state.totalEggs} addMagnitudeFunction={() => this.addXMagnitudes(index)}/> 
-      
-    ))}  
-    <br />
-     {this.state.magnitudes.map((g, index) => (
-       <GeneratorButton magnitude={g} key={index} id={index} totalEggs={this.state.totalEggs} addGeneratorFunction={() => this.addXGenerators(index)}/> 
-  
-    ))} 
-    </span>
-
-
+   
     return (
       <div className="main">
         <HeroImage
-          gameState={this.state} 
-          actionSentence={myActionSentence}
+          gameState={this.state}  
         /> 
-        {/* <section className="egg-actions">
+        <section className="egg-actions">
           {this.state.magnitudes.map((g, index) => (
             <EggMagnitude
               key={index}
@@ -173,50 +160,11 @@ class App extends Component {
               addGeneratorFunc={() => this.addXGenerators(index)}
             />
           ))}
-        </section> */}
+        </section>
       </div>
     );
   }
 }
-
-// const ActionSentence = (props) => { 
-
-//   return (
-//   <span>{props.magnitudes.map((g, index) => (
-//       <MagnitudeButton key={index} id={index} magnitude={g} totalEggs={props.totalEggs} addMagnitudeFunction={() => props.addXMagnitudes(index)}/>
-//     ))} </span>
-
-//   );
-// }
-
-const MagnitudeButton = (props) => {
-  const myMagnitude = props.magnitude;  
-  const isHidden_addMagnitude =
-    myMagnitude.totalClicks == 0 && myMagnitude.costToShowUnlock > props.totalEggs
-      ? "hidden"
-      : "";
  
-  const isAddMagnitudeDisabled = false;
-  return (
-    <span className={"magnitude-option " + isHidden_addMagnitude}>
-      {myMagnitude.total} <a className="magnitude-link" disabled={isAddMagnitudeDisabled} onClick={props.addMagnitudeFunction}>{myMagnitude.name}, </a>
-    </span>
-  );
-};
-
-const GeneratorButton = (props) => {
-  const myMagnitude = props.magnitude;  
-  const isHidden_addGenerator =
-    myMagnitude.totalGeneratorClicks == 0 && myMagnitude.costToGenerate > props.totalEggs
-      ? "hidden"
-      : "";
  
-  const isAddGeneratorDisabled = false;
-  return (
-    <span className={"generator-option " + isHidden_addGenerator}>
-      {myMagnitude.total} <a className="magnitude-link" disabled={isAddGeneratorDisabled} onClick={props.addGeneratorFunction}>{myMagnitude.name}, </a>
-    </span>
-  );
-};
-
 ReactDOM.render(<App />, document.getElementById("root"));
